@@ -9,8 +9,7 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-  
-   <servlet>
+  <servlet>
     <description></description>
     <display-name>MainController</display-name>
     <servlet-name>MainController</servlet-name>
@@ -20,7 +19,6 @@
     <servlet-name>MainController</servlet-name>
     <url-pattern></url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <description></description>
     <display-name>UserController</display-name>
@@ -30,5 +28,15 @@
   <servlet-mapping>
     <servlet-name>UserController</servlet-name>
     <url-pattern>/user</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>GuestbookController</display-name>
+    <servlet-name>GuestbookController</servlet-name>
+    <servlet-class>com.poscoict.mysite.controller.GuestbookController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GuestbookController</servlet-name>
+    <url-pattern>/guestbook</url-pattern>
   </servlet-mapping>
 </web-app>
