@@ -36,9 +36,8 @@ public class UpdateAction implements Action {
 		vo.setNo(no);
 		
 		new UserDao().update(vo);
-//		 UserVo vo = new UserDao().findByNo(authUser.getNo());
-		// forwarding user/updateform
-//		 request.setAttribute("userInfo", vo);
+		session.setAttribute("authUser", vo);
+		
 		
 		MvcUtil.forward("main/index", request, response);
 		
