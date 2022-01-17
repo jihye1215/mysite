@@ -1,23 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@page import="java.util.List"%>
-<%@page import="com.poscoict.mysite.dao.GuestbookDao"%>
-<%@page import="com.poscoict.mysite.vo.GuestbookVo"%>
-<% 
-	List<GuestbookVo> list = (List<GuestbookVo>)request.getAttribute("list");
-	GuestbookDao dao = new GuestbookDao();
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%
+	pageContext.setAttribute("newline", "\n");
 %>
 <html>
 <head>
 <title>mysite</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<link href="<%= request.getContextPath() %>/assets/css/guestbook.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/assets/css/guestbook.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<div id="container">
 		<jsp:include page = "/WEB-INF/views/includes/header.jsp"/>
 		<div id="content">
 			<div id="guestbook">
-				<form action="<%=request.getContextPath() %>/guestbook" method="post">
+				<form action="${pageContext.request.contextPath}/guestbook" method="post">
 					<input type="hidden" name="a" value="add">
 					<table>
 						<tr>
@@ -32,27 +31,22 @@
 						</tr>
 					</table>
 				</form>
-	<%
-		int count = dao.selectCnt();
-		for(GuestbookVo vo : list) {
-	%>
 				<ul>
 					<li>
-						<table>
+					<c:set var = "count" value = "${fn:length(list)}" />
+					<c:forEach items = "${list}" var = "vo" varStatus = "status">
+						<table width = 510 border = 1>
 							<tr>
-								<td><%= count %></td>  
-								<td><%= vo.getName() %></td>
-								<td><%= vo.getReg_date() %></td>
+								<td>${count-status.index}</td>
+								<td>${vo.name}</td>
+								<td>${vo.reg_date}</td>
 							</tr>
 							<tr>
-								<td colspan = 4><%= vo.getMessage().replace("\n", "<br>") %></td>
+								<td colspan = 4>${fn:replace(vo.message, newline, "<br/>")}</td>
 							</tr>
-							<td><a href="<%=request.getContextPath()%>/guestbook?no=<%= vo.getNo() %>&a=deleteform">삭제</a></td>
-							</table>
-	<%
-		count--;
-		}
-	%>
+							<td><a href="${pageContext.request.contextPath}/guestbook?no=${vo.no}&a=deleteform">삭제</a></td>
+							</c:forEach>
+						</table>
 					</li>
 				</ul>
 			</div>
