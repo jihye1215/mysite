@@ -1,7 +1,6 @@
 package com.poscoict.mysite.mvc.board;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -12,22 +11,23 @@ import com.poscoict.mysite.vo.BoardVo;
 import com.poscoict.mysite.web.mvc.Action;
 import com.poscoict.web.util.MvcUtil;
 
-public class ListAction implements Action {
+public class UpdateAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String keyword = request.getParameter("kwd");
-		BoardDao dao = new BoardDao();
-		List<BoardVo> blist = null;
+		String title = request.getParameter("title");
+		String content = request.getParameter("content");
+		String nostring = request.getParameter("no");
+		Long no = Long.parseLong(nostring);
 		
-		if(keyword == null) {
-			blist = dao.selectAll();
-		} else {
-			blist = dao.Keyselect(keyword);
-		}
+		BoardVo vo = new BoardVo();
+		vo.setTitle(title);
+		vo.setContents(content);
+		vo.setNo(no);
 		
-		request.setAttribute("blist", blist);
-		MvcUtil.forward("board/list", request, response);
+		new BoardDao().update(vo);
+		
+		MvcUtil.redirect(request.getContextPath() + "/board", request, response);
 	}
 
 }

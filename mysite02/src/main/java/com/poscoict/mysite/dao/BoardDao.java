@@ -70,6 +70,63 @@ public class BoardDao {
 	      
 	   }
 	
+	public List<BoardVo> Keyselect(String keyword) {
+		// 키워드 글 조회하는 기능
+	      List<BoardVo> result = new ArrayList();
+	      Connection conn = null;
+	      PreparedStatement pstmt = null;
+	      ResultSet rs = null;
+	      
+	      try {
+	         
+	         conn = getConnection();
+	         
+	         String sql = "select b.no, b.title, a.name, b.hit, date_format(b.reg_date, '%Y/%m/%d %H:%i:%s') as reg_date "
+	        		 + "from user a, board b "
+	        		 + "where a.no = b.user_no "
+	        		 + "and title like '%" + keyword + "%'"
+	        		 + "order by reg_date desc ";
+	         pstmt = conn.prepareStatement(sql);
+	         rs = pstmt.executeQuery();
+	         
+	         while(rs.next()) {
+	            Long no = rs.getLong(1);
+	            String title = rs.getString(2);
+	            String name = rs.getString(3);
+	            int hit = rs.getInt(4);
+	            String regDate = rs.getString(5);
+	            
+	            
+	            BoardVo vo = new BoardVo();
+	            vo.setNo(no);
+	            vo.setTitle(title);
+	            vo.setUserName(name);
+	            vo.setHit(hit);
+	            vo.setRegDate(regDate);
+	            result.add(vo);
+	         }
+	      } catch(SQLException e) {
+	         System.out.println("error : " + e);
+	      } finally {
+	         // 자원 정리
+	         try {
+	            if(rs != null) {
+	               rs.close();
+	            }
+	            if(pstmt != null) {
+	               pstmt.close();
+	            }
+	            if(conn != null) {
+	               conn.close();
+	            }
+	         } catch (SQLException e) {
+	            e.printStackTrace();
+	         }
+	      }
+	      return result;
+	      
+	   }
+	
 	public boolean insertNew(BoardVo vo) {
 		// 새 글 작성하는 기능
 	      boolean result = false;
@@ -164,17 +221,21 @@ public class BoardDao {
 	         
 	         conn = getConnection();
 	         
-	         String sql = "select title, contents from board where no = " + no;
+	         String sql = "select no, title, contents, user_no from board where no = " + no;
 	         pstmt = conn.prepareStatement(sql);
 	         rs = pstmt.executeQuery();
 	         
 	         while(rs.next()) {
-	            String title = rs.getString(1);
-	            String contents = rs.getString(2);
+	        	Long no1 = rs.getLong(1);
+	            String title = rs.getString(2);
+	            String contents = rs.getString(3);
+	            Long userNo = rs.getLong(4);
 	            
 	            vo = new BoardVo();
+	            vo.setNo(no1);
 	            vo.setTitle(title);
 	            vo.setContents(contents);
+	            vo.setUserNo(userNo);
 	         }
 	      } catch(SQLException e) {
 	         System.out.println("error : " + e);
@@ -196,6 +257,52 @@ public class BoardDao {
 	      }
 	      return vo;
 	      
+	   }
+	
+	public boolean update(BoardVo vo) {
+		// 글 삭제하는 기능
+	      
+	      boolean result = false;
+	      Connection conn = null;
+	      PreparedStatement pstmt = null;
+	      ResultSet rs = null;
+	      
+	      try {
+	         conn = getConnection();
+	         
+	         //3. SQL 준비
+	         String sql = "update board set title = ?, contents = ? where no = ?";
+	         pstmt = conn.prepareStatement(sql);
+
+	         //4. 바인딩(binding)   
+	         pstmt.setString(1, vo.getTitle());
+	         pstmt.setString(2, vo.getContents());
+	         pstmt.setLong(3, vo.getNo());
+	         
+	         //5. SQL 실행 , executeQuery는 rs, executeUpdate는 int로 반환한다. 
+	         result = (pstmt.executeUpdate() == 1);
+
+	      } catch (SQLException e) {
+	         System.out.print("error : " + e); 
+	      }
+	      
+	      finally {
+	         try {
+	            if(rs != null) {
+	               rs.close();
+	            }
+	            if(pstmt != null) {
+	               pstmt.close();
+	            }
+	            if(conn != null) {
+	               conn.close();
+	            }
+	         } catch(SQLException e) {
+	            e.printStackTrace();
+	         }
+	      }
+	      
+	      return result;
 	   }
 
 	 private Connection getConnection() throws SQLException {

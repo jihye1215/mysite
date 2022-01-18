@@ -1,4 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%
+	pageContext.setAttribute("newline", "\n");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,14 +29,16 @@
 						<td class="label">내용</td>
 						<td>
 							<div class="view-content">
-								${selectvo.contents}
+								${fn:replace(selectvo.contents, newline, "<br/>")}
 							</div>
 						</td>
 					</tr>
 				</table>
 				<div class="bottom">
 					<a href="${pageContext.request.contextPath}/board">글목록</a>
-					<a href="">글수정</a>
+					<c:if test = "${authUser.no eq selectvo.userNo}">
+						<a href="${pageContext.request.contextPath}/board?a=updateform&no=${selectvo.no}">글수정</a>
+					</c:if>
 				</div>
 			</div>
 		</div>
