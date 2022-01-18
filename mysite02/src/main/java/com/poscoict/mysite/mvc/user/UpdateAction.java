@@ -32,10 +32,16 @@ public class UpdateAction implements Action {
 		UserVo vo = new UserVo();
 		vo.setName(name);
 		vo.setGender(gender);
-		vo.setPassword(password);
-		vo.setNo(no);
-		
-		new UserDao().update(vo);
+		if(password.isBlank() == false) {
+			vo.setPassword(password);
+			vo.setNo(no);
+			
+			new UserDao().update(vo);
+		} else {
+			vo.setNo(no);
+			
+			new UserDao().updateNopassword(vo);
+		}
 		session.setAttribute("authUser", vo);
 		
 		

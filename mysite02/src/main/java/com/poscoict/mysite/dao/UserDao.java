@@ -185,6 +185,42 @@ public class UserDao {
 			
 			return result;
 		}
+		
+		public boolean updateNopassword(UserVo vo) {
+			boolean result = false;
+
+			Connection conn = null;
+			PreparedStatement pstmt = null;
+			try {
+				conn = getConnection();
+				
+				String sql = "update user set name = ?, gender = ? where no = ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, vo.getName());
+				pstmt.setString(2, vo.getGender());
+				pstmt.setLong(3, vo.getNo());
+				
+				int count = pstmt.executeUpdate();
+				result = count == 1;
+				
+			} catch (SQLException e) {
+				System.out.println("error:" + e);
+			} finally {
+				try {
+					if(pstmt != null) {
+						pstmt.close();
+					}
+					if(conn != null) {
+						conn.close();
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}		
+			
+			return result;
+		}
+	
 	
 	   private Connection getConnection() throws SQLException {
 		      Connection conn = null;
