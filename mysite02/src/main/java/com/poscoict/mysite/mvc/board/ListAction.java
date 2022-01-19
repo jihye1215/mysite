@@ -35,6 +35,7 @@ public class ListAction implements Action {
 		}
 		request.setAttribute("newcnt", newcnt);
 		request.setAttribute("cnt", cnt);
+		request.setAttribute("pagenum", pagenum);
 		
 		
 		if(keyword == null) {

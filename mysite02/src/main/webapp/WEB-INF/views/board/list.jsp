@@ -29,10 +29,11 @@
 						<th>작성일</th>
 						<th>&nbsp;</th>
 					</tr>	
-					<c:set var = "count" value = "${fn:length(blist)}" />
+					<c:set var = "count" value = "${cnt-((pagenum-1)*5)}" />
 					<c:forEach items = "${blist}" var = "vo" varStatus = "status">		
 						<tr>
-							<td>${count-status.index}</td>
+							<td>${count}</td>
+							<c:set var = "count" value = "${count - 1}" />
 							<td style = "text-align: left; padding-left: ${(vo.depth-1)*20}px">
 							<c:if test = "${vo.depth ne 1}">
 							<img src = '${pageContext.request.contextPath}/assets/images/reply.png'/>
@@ -52,24 +53,16 @@
 				<div class="pager">
 					<ul>
 						<c:forEach begin = "1" end = "${newcnt}" step = "1" var = "page">
-							<li><a href = '${pageContext.servletContext.contextPath}/board?pagenum=${page}'>${page}</a></li>
+							<c:if test = "${pagenum eq page}">
+								<li class = "selected">
+							</c:if>
+							<c:if test = "${pagenum ne page}">
+								<li>
+							</c:if>
+							<a href = '${pageContext.servletContext.contextPath}/board?pagenum=${page}'>${page}</a></li>
 						</c:forEach>
 					</ul>
 				</div>	
-				
-				<!-- pager 추가 
-				<div class="pager">
-					<ul>
-						<li><a href="">◀</a></li>
-						<li><a href="">1</a></li>
-						<li class="selected">2</li>
-						<li><a href="">3</a></li>
-						<li>4</li>
-						<li>5</li>
-						<li><a href="">▶</a></li>
-					</ul>
-				</div>					
-				 pager 추가 -->
 				
 				<div class="bottom">
 					<c:if test = "${not empty authUser.no}">
