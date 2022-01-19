@@ -49,6 +49,14 @@
 					</c:forEach>
 				</table>
 				
+				<div class="pager">
+					<ul>
+						<c:forEach begin = "1" end = "${newcnt}" step = "1" var = "page">
+							<li><a href = '${pageContext.servletContext.contextPath}/board?pagenum=${page}'>${page}</a></li>
+						</c:forEach>
+					</ul>
+				</div>	
+				
 				<!-- pager 추가 
 				<div class="pager">
 					<ul>

@@ -17,13 +17,30 @@ public class ListAction implements Action {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String keyword = request.getParameter("kwd");
+		String pagenumstring = request.getParameter("pagenum");
+		int pagenum = 1;
+		if(pagenumstring != null) {
+			pagenum = Integer.parseInt(pagenumstring);
+		}
+		
 		BoardDao dao = new BoardDao();
 		List<BoardVo> blist = null;
 		
+		int cnt = dao.cnt();
+		int newcnt = 0;
+		if(cnt%5 == 0) {
+			newcnt = cnt/5;
+		} else if(cnt%5 != 0) {
+			newcnt = cnt/5 + 1;
+		}
+		request.setAttribute("newcnt", newcnt);
+		request.setAttribute("cnt", cnt);
+		
+		
 		if(keyword == null) {
-			blist = dao.selectAll();
+			blist = dao.selectAll(pagenum);
 		} else {
-			blist = dao.Keyselect(keyword);
+			blist = dao.Keyselect(keyword, pagenum);
 		}
 		
 		request.setAttribute("blist", blist);

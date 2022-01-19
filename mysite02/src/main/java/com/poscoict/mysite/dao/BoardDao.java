@@ -14,7 +14,7 @@ import com.poscoict.mysite.vo.GuestbookVo;
 
 public class BoardDao {
 	
-	public List<BoardVo> selectAll() {
+	public List<BoardVo> selectAll(int num) {
 		// 글 조회하는 기능
 	      List<BoardVo> result = new ArrayList();
 	      Connection conn = null;
@@ -28,7 +28,8 @@ public class BoardDao {
 	         String sql = "select b.no, b.title, a.name, b.hit, date_format(b.reg_date, '%Y/%m/%d %H:%i:%s') as reg_date, b.user_no, b.g_no, b.o_no, b.depth "
 	        		 + "from user a, board b "
 	        		 + "where a.no = b.user_no "
-	        		 + "order by g_no desc, o_no asc ";
+	        		 + "order by g_no desc, o_no asc "
+	        		 + "limit " + (num-1)*5 + ", 5";
 	         pstmt = conn.prepareStatement(sql);
 	         rs = pstmt.executeQuery();
 	         
@@ -77,7 +78,7 @@ public class BoardDao {
 	      
 	   }
 	
-	public List<BoardVo> Keyselect(String keyword) {
+	public List<BoardVo> Keyselect(String keyword, int num) {
 		// 키워드 글 조회하는 기능
 	      List<BoardVo> result = new ArrayList();
 	      Connection conn = null;
@@ -92,7 +93,8 @@ public class BoardDao {
 	        		 + "from user a, board b "
 	        		 + "where a.no = b.user_no "
 	        		 + "and title like '%" + keyword + "%'"
-	        		 + "order by g_no desc, o_no asc ";
+	        		 + "order by g_no desc, o_no asc "
+	        		 + "limit " + (num-1)*5 + ", 5";
 	         pstmt = conn.prepareStatement(sql);
 	         rs = pstmt.executeQuery();
 	         
@@ -453,6 +455,48 @@ public class BoardDao {
 	         }
 	      }
 	      return result;
+	   }
+	
+	public int cnt() {
+		// 페이징 
+	      BoardVo vo = null;
+	      Connection conn = null;
+	      PreparedStatement pstmt = null;
+	      ResultSet rs = null;
+	      int cnt;
+	      
+	      try {
+	         
+	         conn = getConnection();
+	         
+	         String sql = "select count(*) from board";
+	         pstmt = conn.prepareStatement(sql);
+	         rs = pstmt.executeQuery();
+	         
+	         rs.next();
+	         cnt = rs.getInt(1);
+	         
+	      } catch(SQLException e) {
+	    	  cnt = 0;
+	         System.out.println("error : " + e);
+	      } finally {
+	         // 자원 정리
+	         try {
+	            if(rs != null) {
+	               rs.close();
+	            }
+	            if(pstmt != null) {
+	               pstmt.close();
+	            }
+	            if(conn != null) {
+	               conn.close();
+	            }
+	         } catch (SQLException e) {
+	            e.printStackTrace();
+	         }
+	      }
+	      return cnt;
+	      
 	   }
 
 
