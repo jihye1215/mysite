@@ -16,7 +16,7 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp"/>
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="${pageContext.servletContext.contextPath}/board" method="post">
+				<form id="search_form" action="${pageContext.request.contextPath}/board" method="post">
 					<input type="text" id="kwd" name="kwd" value="">
 					<input type="submit" value="찾기">
 				</form>
@@ -38,8 +38,8 @@
 							<td>${vo.userName}</td>
 							<td>${vo.hit}</td>
 							<td>${vo.regDate}</td>
-							<c:if test = "${authUser.name eq vo.userName}">
-							<td><a href="${pageContext.servletContext.contextPath}/board?a=delete&no=${vo.no}"  class="del" style='background-image: url("${pageContext.servletContext.contextPath }/assets/images/recycle.png")'>삭제</a></td>
+							<c:if test = "${authUser.no eq vo.userNo}">
+								<td><a href="${pageContext.servletContext.contextPath}/board?a=delete&no=${vo.no}"  class="del" style='background-image: url("${pageContext.servletContext.contextPath }/assets/images/recycle.png")'>삭제</a></td>
 							</c:if>
 						</tr>
 					</c:forEach>

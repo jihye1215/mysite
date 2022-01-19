@@ -25,7 +25,7 @@ public class BoardDao {
 	         
 	         conn = getConnection();
 	         
-	         String sql = "select b.no, b.title, a.name, b.hit, date_format(b.reg_date, '%Y/%m/%d %H:%i:%s') as reg_date "
+	         String sql = "select b.no, b.title, a.name, b.hit, date_format(b.reg_date, '%Y/%m/%d %H:%i:%s') as reg_date, b.user_no "
 	        		 + "from user a, board b "
 	        		 + "where a.no = b.user_no "
 	        		 + "order by reg_date desc ";
@@ -38,7 +38,7 @@ public class BoardDao {
 	            String name = rs.getString(3);
 	            int hit = rs.getInt(4);
 	            String regDate = rs.getString(5);
-	            
+	            Long userNo = rs.getLong(6);
 	            
 	            BoardVo vo = new BoardVo();
 	            vo.setNo(no);
@@ -46,6 +46,7 @@ public class BoardDao {
 	            vo.setUserName(name);
 	            vo.setHit(hit);
 	            vo.setRegDate(regDate);
+	            vo.setUserNo(userNo);
 	            result.add(vo);
 	         }
 	      } catch(SQLException e) {
@@ -81,7 +82,7 @@ public class BoardDao {
 	         
 	         conn = getConnection();
 	         
-	         String sql = "select b.no, b.title, a.name, b.hit, date_format(b.reg_date, '%Y/%m/%d %H:%i:%s') as reg_date "
+	         String sql = "select b.no, b.title, a.name, b.hit, date_format(b.reg_date, '%Y/%m/%d %H:%i:%s') as reg_date, b.user_no  "
 	        		 + "from user a, board b "
 	        		 + "where a.no = b.user_no "
 	        		 + "and title like '%" + keyword + "%'"
@@ -95,7 +96,7 @@ public class BoardDao {
 	            String name = rs.getString(3);
 	            int hit = rs.getInt(4);
 	            String regDate = rs.getString(5);
-	            
+	            Long userNo = rs.getLong(6);
 	            
 	            BoardVo vo = new BoardVo();
 	            vo.setNo(no);
@@ -103,6 +104,7 @@ public class BoardDao {
 	            vo.setUserName(name);
 	            vo.setHit(hit);
 	            vo.setRegDate(regDate);
+	            vo.setUserNo(userNo);
 	            result.add(vo);
 	         }
 	      } catch(SQLException e) {
@@ -304,6 +306,50 @@ public class BoardDao {
 	      
 	      return result;
 	   }
+	
+	public boolean views(BoardVo vo) {
+		// 조회수 증가하는 기능
+		boolean result = false;
+	      Connection conn = null;
+	      PreparedStatement pstmt = null;
+	      ResultSet rs = null;
+	      
+	      try {
+	         conn = getConnection();
+	         
+	         //3. SQL 준비
+	         String sql = "update board set hit = hit + 1 where no = ?";
+	         pstmt = conn.prepareStatement(sql);
+
+	         //4. 바인딩(binding)   
+	         pstmt.setLong(1, vo.getNo());
+	         
+	         //5. SQL 실행 , executeQuery는 rs, executeUpdate는 int로 반환한다. 
+	         result = (pstmt.executeUpdate() == 1);
+
+	      } catch (SQLException e) {
+	         System.out.print("error : " + e); 
+	      }
+	      
+	      finally {
+	         try {
+	            if(rs != null) {
+	               rs.close();
+	            }
+	            if(pstmt != null) {
+	               pstmt.close();
+	            }
+	            if(conn != null) {
+	               conn.close();
+	            }
+	         } catch(SQLException e) {
+	            e.printStackTrace();
+	         }
+	      }
+	      
+	      return result;
+		
+	}
 
 	 private Connection getConnection() throws SQLException {
 	      Connection conn = null;
