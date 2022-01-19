@@ -33,7 +33,11 @@
 					<c:forEach items = "${blist}" var = "vo" varStatus = "status">		
 						<tr>
 							<td>${count-status.index}</td>
-							<td><a href = '${pageContext.servletContext.contextPath}/board?no=${vo.no}&a=select'>
+							<td style = "text-align: left; padding-left: ${(vo.depth-1)*20}px">
+							<c:if test = "${vo.depth ne 1}">
+							<img src = '${pageContext.request.contextPath}/assets/images/reply.png'/>
+							</c:if>
+							<a href = '${pageContext.servletContext.contextPath}/board?no=${vo.no}&a=select'>
 							${vo.title}</a></td>
 							<td>${vo.userName}</td>
 							<td>${vo.hit}</td>

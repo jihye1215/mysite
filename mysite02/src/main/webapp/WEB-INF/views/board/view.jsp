@@ -39,6 +39,9 @@
 					<c:if test = "${authUser.no eq selectvo.userNo}">
 						<a href="${pageContext.request.contextPath}/board?a=updateform&no=${selectvo.no}">글수정</a>
 					</c:if>
+					<a href = "${pageContext.request.contextPath}/board?a=reply&no=${selectvo.no}">
+						답글
+					</a>
 				</div>
 			</div>
 		</div>

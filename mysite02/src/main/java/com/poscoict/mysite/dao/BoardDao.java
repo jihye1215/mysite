@@ -25,10 +25,10 @@ public class BoardDao {
 	         
 	         conn = getConnection();
 	         
-	         String sql = "select b.no, b.title, a.name, b.hit, date_format(b.reg_date, '%Y/%m/%d %H:%i:%s') as reg_date, b.user_no "
+	         String sql = "select b.no, b.title, a.name, b.hit, date_format(b.reg_date, '%Y/%m/%d %H:%i:%s') as reg_date, b.user_no, b.g_no, b.o_no, b.depth "
 	        		 + "from user a, board b "
 	        		 + "where a.no = b.user_no "
-	        		 + "order by reg_date desc ";
+	        		 + "order by g_no desc, o_no asc ";
 	         pstmt = conn.prepareStatement(sql);
 	         rs = pstmt.executeQuery();
 	         
@@ -39,6 +39,9 @@ public class BoardDao {
 	            int hit = rs.getInt(4);
 	            String regDate = rs.getString(5);
 	            Long userNo = rs.getLong(6);
+	            int groupno = rs.getInt(7);
+	            int orderno = rs.getInt(8);
+	            int depth = rs.getInt(9);
 	            
 	            BoardVo vo = new BoardVo();
 	            vo.setNo(no);
@@ -47,6 +50,9 @@ public class BoardDao {
 	            vo.setHit(hit);
 	            vo.setRegDate(regDate);
 	            vo.setUserNo(userNo);
+	            vo.setGroupno(groupno);
+	            vo.setOrderno(orderno);
+	            vo.setDepth(depth);
 	            result.add(vo);
 	         }
 	      } catch(SQLException e) {
@@ -82,11 +88,11 @@ public class BoardDao {
 	         
 	         conn = getConnection();
 	         
-	         String sql = "select b.no, b.title, a.name, b.hit, date_format(b.reg_date, '%Y/%m/%d %H:%i:%s') as reg_date, b.user_no  "
+	         String sql = "select b.no, b.title, a.name, b.hit, date_format(b.reg_date, '%Y/%m/%d %H:%i:%s') as reg_date, b.user_no, b.g_no, b.o_no, b.depth "
 	        		 + "from user a, board b "
 	        		 + "where a.no = b.user_no "
 	        		 + "and title like '%" + keyword + "%'"
-	        		 + "order by reg_date desc ";
+	        		 + "order by g_no desc, o_no asc ";
 	         pstmt = conn.prepareStatement(sql);
 	         rs = pstmt.executeQuery();
 	         
@@ -97,6 +103,9 @@ public class BoardDao {
 	            int hit = rs.getInt(4);
 	            String regDate = rs.getString(5);
 	            Long userNo = rs.getLong(6);
+	            int groupno = rs.getInt(7);
+	            int orderno = rs.getInt(8);
+	            int depth = rs.getInt(9);
 	            
 	            BoardVo vo = new BoardVo();
 	            vo.setNo(no);
@@ -105,6 +114,9 @@ public class BoardDao {
 	            vo.setHit(hit);
 	            vo.setRegDate(regDate);
 	            vo.setUserNo(userNo);
+	            vo.setGroupno(groupno);
+	            vo.setOrderno(orderno);
+	            vo.setDepth(depth);
 	            result.add(vo);
 	         }
 	      } catch(SQLException e) {
@@ -139,7 +151,7 @@ public class BoardDao {
 	      try {
 	         conn = getConnection();
 	         
-	         String sql = "insert into board values(null, ?, ?, 0, 1, 1, 1, now(), ?)";
+	         String sql = "insert into board values(null, ?, ?, 0, (select max(g_no)+1 from board a), 1, 1, now(), ?)";
 	         pstmt = conn.prepareStatement(sql);
 	         
 	         pstmt.setString(1,  vo.getTitle());
@@ -223,7 +235,7 @@ public class BoardDao {
 	         
 	         conn = getConnection();
 	         
-	         String sql = "select no, title, contents, user_no from board where no = " + no;
+	         String sql = "select no, title, contents, user_no, g_no, o_no, depth from board where no = " + no;
 	         pstmt = conn.prepareStatement(sql);
 	         rs = pstmt.executeQuery();
 	         
@@ -232,12 +244,19 @@ public class BoardDao {
 	            String title = rs.getString(2);
 	            String contents = rs.getString(3);
 	            Long userNo = rs.getLong(4);
+	            int groupno = rs.getInt(5);
+	            int orderno = rs.getInt(6);
+	            int depth = rs.getInt(7);
 	            
 	            vo = new BoardVo();
 	            vo.setNo(no1);
 	            vo.setTitle(title);
 	            vo.setContents(contents);
 	            vo.setUserNo(userNo);
+	            vo.setGroupno(groupno);
+	            vo.setOrderno(orderno);
+	            vo.setDepth(depth);
+	            
 	         }
 	      } catch(SQLException e) {
 	         System.out.println("error : " + e);
@@ -350,6 +369,92 @@ public class BoardDao {
 	      return result;
 		
 	}
+	
+	public boolean updateReply(int Orderno, int Groupno) {
+		// orderno 증가
+		boolean result = false;
+	      Connection conn = null;
+	      PreparedStatement pstmt = null;
+	      ResultSet rs = null;
+	      
+	      try {
+	         conn = getConnection();
+	         
+	         //3. SQL 준비
+	         String sql = "update board set o_no = o_no + 1 where o_no > " + Orderno + " and g_no = " + Groupno;
+	         pstmt = conn.prepareStatement(sql);
+
+	         //4. 바인딩(binding)   
+	         
+	         //5. SQL 실행 , executeQuery는 rs, executeUpdate는 int로 반환한다. 
+	         result = (pstmt.executeUpdate() == 1);
+
+	      } catch (SQLException e) {
+	         System.out.print("error : " + e); 
+	      }
+	      
+	      finally {
+	         try {
+	            if(rs != null) {
+	               rs.close();
+	            }
+	            if(pstmt != null) {
+	               pstmt.close();
+	            }
+	            if(conn != null) {
+	               conn.close();
+	            }
+	         } catch(SQLException e) {
+	            e.printStackTrace();
+	         }
+	      }
+	      
+	      return result;
+		
+	}
+	
+	public boolean insertReply(BoardVo vo) {
+		// 답글 작성하는 기능
+	      boolean result = false;
+	      Connection conn = null;
+	      PreparedStatement pstmt = null;
+	      ResultSet rs = null;
+	      
+	      try {
+	         conn = getConnection();
+	         
+	         String sql = "insert into board values(null, ?, ?, 0, ?, ?, ?, now(), ?)";
+	         pstmt = conn.prepareStatement(sql);
+	         
+	         pstmt.setString(1,  vo.getTitle());
+	         pstmt.setString(2, vo.getContents());
+	         pstmt.setInt(3, vo.getGroupno());
+	         pstmt.setInt(4, vo.getOrderno() + 1);
+	         pstmt.setInt(5, vo.getDepth() + 1);
+	         pstmt.setLong(6, vo.getUserNo());
+	         
+	         result = (pstmt.executeUpdate() == 1);
+	      } catch(SQLException e) {
+	         System.out.print("error : "+e);
+	      }finally {
+	         // 자원 정리
+	         try {
+	            if(rs != null) {
+	               rs.close();
+	            }
+	            if(pstmt != null) {
+	               pstmt.close();
+	            }
+	            if(conn != null) {
+	               conn.close();
+	            }
+	         } catch (SQLException e) {
+	            e.printStackTrace();
+	         }
+	      }
+	      return result;
+	   }
+
 
 	 private Connection getConnection() throws SQLException {
 	      Connection conn = null;
