@@ -153,7 +153,7 @@ public class BoardDao {
 	      try {
 	         conn = getConnection();
 	         
-	         String sql = "insert into board values(null, ?, ?, 0, (select max(g_no)+1 from board a), 1, 1, now(), ?)";
+	         String sql = "insert into board values(null, ?, ?, 0, (select IFNULL(max(g_no), 0)+1 from board a), 1, 1, now(), ?)";
 	         pstmt = conn.prepareStatement(sql);
 	         
 	         pstmt.setString(1,  vo.getTitle());
