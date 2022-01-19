@@ -59,7 +59,12 @@
 							<c:if test = "${pagenum ne page}">
 								<li>
 							</c:if>
-							<a href = '${pageContext.servletContext.contextPath}/board?pagenum=${page}'>${page}</a></li>
+							<c:if test = "${keyword eq null}">
+								<a href = '${pageContext.servletContext.contextPath}/board?pagenum=${page}'>${page}</a></li>
+							</c:if>
+							<c:if test = "${keyword ne null}">
+								<a href = '${pageContext.servletContext.contextPath}/board?pagenum=${page}&kwd=${keyword}'>${page}</a></li>
+							</c:if>
 						</c:forEach>
 					</ul>
 				</div>	

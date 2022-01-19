@@ -498,6 +498,49 @@ public class BoardDao {
 	      return cnt;
 	      
 	   }
+	
+	public int cntKey(String keyword) {
+		// 페이징 
+	      BoardVo vo = null;
+	      Connection conn = null;
+	      PreparedStatement pstmt = null;
+	      ResultSet rs = null;
+	      int cnt;
+	      
+	      try {
+	         
+	         conn = getConnection();
+	         
+	         String sql = "select count(*) from board where title like '%" + keyword + "%'";
+	         pstmt = conn.prepareStatement(sql);
+	         rs = pstmt.executeQuery();
+	         
+	         rs.next();
+	         cnt = rs.getInt(1);
+	         
+	      } catch(SQLException e) {
+	    	  cnt = 0;
+	         System.out.println("error : " + e);
+	      } finally {
+	         // 자원 정리
+	         try {
+	            if(rs != null) {
+	               rs.close();
+	            }
+	            if(pstmt != null) {
+	               pstmt.close();
+	            }
+	            if(conn != null) {
+	               conn.close();
+	            }
+	         } catch (SQLException e) {
+	            e.printStackTrace();
+	         }
+	      }
+	      return cnt;
+	      
+	   }
+
 
 
 	 private Connection getConnection() throws SQLException {

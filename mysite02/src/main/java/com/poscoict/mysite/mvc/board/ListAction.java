@@ -26,21 +26,30 @@ public class ListAction implements Action {
 		BoardDao dao = new BoardDao();
 		List<BoardVo> blist = null;
 		
-		int cnt = dao.cnt();
-		int newcnt = 0;
-		if(cnt%5 == 0) {
-			newcnt = cnt/5;
-		} else if(cnt%5 != 0) {
-			newcnt = cnt/5 + 1;
-		}
-		request.setAttribute("newcnt", newcnt);
-		request.setAttribute("cnt", cnt);
-		request.setAttribute("pagenum", pagenum);
-		
-		
 		if(keyword == null) {
+			int cnt = dao.cnt();
+			int newcnt = 0;
+			if(cnt%5 == 0) {
+				newcnt = cnt/5;
+			} else if(cnt%5 != 0) {
+				newcnt = cnt/5 + 1;
+			}
+			request.setAttribute("newcnt", newcnt);
+			request.setAttribute("cnt", cnt);
+			request.setAttribute("pagenum", pagenum);
 			blist = dao.selectAll(pagenum);
 		} else {
+			int cnt = dao.cntKey(keyword);
+			int newcnt = 0;
+			if(cnt%5 == 0) {
+				newcnt = cnt/5;
+			} else if(cnt%5 != 0) {
+				newcnt = cnt/5 + 1;
+			}
+			request.setAttribute("newcnt", newcnt);
+			request.setAttribute("cnt", cnt);
+			request.setAttribute("pagenum", pagenum);
+			request.setAttribute("keyword", keyword);
 			blist = dao.Keyselect(keyword, pagenum);
 		}
 		
