@@ -16,7 +16,7 @@ public class MainController extends HttpServlet {
 
 	@Override
 	public void init() throws ServletException {
-		String configPath = this.getServletConfig().getInitParameter("config");
+		String configPath = this.getServletConfig().getInitParameter("contextConfigLocation");
 		System.out.println("MainController.init() called : " + configPath);
 		
 		super.init();
