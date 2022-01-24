@@ -16,7 +16,7 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp"/>
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="${pageContext.request.contextPath}/board" method="post">
+				<form id="search_form" action="${pageContext.request.contextPath}/board/list" method="post">
 					<input type="text" id="kwd" name="kwd" value="">
 					<input type="submit" value="찾기">
 				</form>
@@ -29,8 +29,8 @@
 						<th>작성일</th>
 						<th>&nbsp;</th>
 					</tr>	
-					<c:set var = "count" value = "${cnt-((pagenum-1)*5)}" />
-					<c:forEach items = "${blist}" var = "vo" varStatus = "status">		
+					<c:set var = "count" value = "${map.cnt-((map.pagenum-1)*5)}" />
+					<c:forEach items = "${map.list}" var = "vo" varStatus = "status">		
 						<tr>
 							<td>${count}</td>
 							<c:set var = "count" value = "${count - 1}" />
@@ -38,13 +38,13 @@
 							<c:if test = "${vo.depth ne 1}">
 							<img src = '${pageContext.request.contextPath}/assets/images/reply.png'/>
 							</c:if>
-							<a href = '${pageContext.servletContext.contextPath}/board?no=${vo.no}&a=select'>
+							<a href = '${pageContext.servletContext.contextPath}/board/select/${vo.no}'>
 							${vo.title}</a></td>
 							<td>${vo.userName}</td>
 							<td>${vo.hit}</td>
 							<td>${vo.regDate}</td>
 							<c:if test = "${authUser.no eq vo.userNo}">
-								<td><a href="${pageContext.servletContext.contextPath}/board?a=delete&no=${vo.no}"  class="del" style='background-image: url("${pageContext.servletContext.contextPath }/assets/images/recycle.png")'>삭제</a></td>
+								<td><a href="${pageContext.servletContext.contextPath}/board/delete/${vo.no}"  class="del" style='background-image: url("${pageContext.servletContext.contextPath }/assets/images/recycle.png")'>삭제</a></td>
 							</c:if>
 						</tr>
 					</c:forEach>
@@ -52,18 +52,18 @@
 				
 				<div class="pager">
 					<ul>
-						<c:forEach begin = "1" end = "${newcnt}" step = "1" var = "page">
-							<c:if test = "${pagenum eq page}">
+						<c:forEach begin = "1" end = "${map.newcnt}" step = "1" var = "page">
+							<c:if test = "${map.pagenum eq page}">
 								<li class = "selected">
 							</c:if>
-							<c:if test = "${pagenum ne page}">
+							<c:if test = "${map.pagenum ne page}">
 								<li>
 							</c:if>
-							<c:if test = "${keyword eq null}">
-								<a href = '${pageContext.servletContext.contextPath}/board?pagenum=${page}'>${page}</a></li>
+							<c:if test = "${map.keyword eq null}">
+								<a href = '${pageContext.servletContext.contextPath}/board/list?pagenum=${page}'>${page}</a></li>
 							</c:if>
-							<c:if test = "${keyword ne null}">
-								<a href = '${pageContext.servletContext.contextPath}/board?pagenum=${page}&kwd=${keyword}'>${page}</a></li>
+							<c:if test = "${map.keyword ne null}">
+								<a href = '${pageContext.servletContext.contextPath}/board/list?pagenum=${page}&kwd=${map.keyword}'>${page}</a></li>
 							</c:if>
 						</c:forEach>
 					</ul>
@@ -71,7 +71,7 @@
 				
 				<div class="bottom">
 					<c:if test = "${not empty authUser.no}">
-						<a href="${pageContext.request.contextPath}/board?a=writeform" id="new-book">글쓰기</a>
+						<a href="${pageContext.request.contextPath}/board/write" id="new-book">글쓰기</a>
 					</c:if>
 				</div>				
 			</div>

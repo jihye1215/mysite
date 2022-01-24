@@ -35,12 +35,12 @@
 					</tr>
 				</table>
 				<div class="bottom">
-					<a href="${pageContext.request.contextPath}/board">글목록</a>
+					<a href="${pageContext.request.contextPath}/board/list">글목록</a>
 					<c:if test = "${authUser.no eq selectvo.userNo}">
-						<a href="${pageContext.request.contextPath}/board?a=updateform&no=${selectvo.no}">글수정</a>
+						<a href="${pageContext.request.contextPath}/board/update/${selectvo.no}">글수정</a>
 					</c:if>
 					<c:if test = "${not empty authUser.no}">
-						<a href = "${pageContext.request.contextPath}/board?a=reply&no=${selectvo.no}">
+						<a href = "${pageContext.request.contextPath}/board/reply/${selectvo.no}">
 							답글
 						</a>
 					</c:if>

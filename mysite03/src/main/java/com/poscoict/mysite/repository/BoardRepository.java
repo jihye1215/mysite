@@ -5,13 +5,14 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.poscoict.mysite.vo.BoardVo;
-import com.poscoict.mysite.vo.GuestbookVo;
+import org.springframework.stereotype.Repository;
 
+import com.poscoict.mysite.vo.BoardVo;
+
+@Repository
 public class BoardRepository {
 	
 	public List<BoardVo> selectAll(int num) {
@@ -328,7 +329,7 @@ public class BoardRepository {
 	      return result;
 	   }
 	
-	public boolean views(BoardVo vo) {
+	public boolean views(Long no) {
 		// 조회수 증가하는 기능
 		boolean result = false;
 	      Connection conn = null;
@@ -339,11 +340,10 @@ public class BoardRepository {
 	         conn = getConnection();
 	         
 	         //3. SQL 준비
-	         String sql = "update board set hit = hit + 1 where no = ?";
+	         String sql = "update board set hit = hit + 1 where no = " + no;
 	         pstmt = conn.prepareStatement(sql);
 
 	         //4. 바인딩(binding)   
-	         pstmt.setLong(1, vo.getNo());
 	         
 	         //5. SQL 실행 , executeQuery는 rs, executeUpdate는 int로 반환한다. 
 	         result = (pstmt.executeUpdate() == 1);
