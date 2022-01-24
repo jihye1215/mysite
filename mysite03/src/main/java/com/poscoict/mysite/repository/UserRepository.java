@@ -101,7 +101,7 @@ public class UserRepository {
 		      
 		}
 		
-		public UserVo findByNo(Long no) {
+		public UserVo findByNo(Long userNo) {
 			
 			UserVo result = null;
 		      Connection conn = null;
@@ -115,7 +115,7 @@ public class UserRepository {
 		         String sql = "select name, email, password, gender from user where no = ?";
 		         pstmt = conn.prepareStatement(sql);
 		        
-		         pstmt.setLong(1, no);
+		         pstmt.setLong(1, userNo);
 		         
 		         rs = pstmt.executeQuery();
 		         

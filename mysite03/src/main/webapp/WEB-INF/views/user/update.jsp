@@ -15,22 +15,31 @@
 		<div id="content">
 			<div id="user">
 
-				<form id="join-form" name="joinForm" method="post" action="${pageContext.request.contextPath}/user">
-					<input type='hidden' name='a' value='update'>
+				<form id="join-form" name="joinForm" method="post" action="${pageContext.request.contextPath}/user/update">
 					<label class="block-label" for="name">이름</label>
-					<input id="name" name="name" type="text" value="${authUser.name}">
+					<input id="name" name="name" type="text" value="${userVo.name}">
 					<input type = 'hidden' name = "no" value = "${authUser.no}">
 
 					<label class="block-label" for="email">이메일</label>
-					<h4>${userInfo.email}</h4>
+					<h4>${userVo.email}</h4>
 					
 					<label class="block-label">패스워드</label>
 					<input name="password" type="password" value="">
 					
 					<fieldset>
 						<legend>성별</legend>
+						
+						<c:choose>
+							<c:when test = "${userVo.gender == 'female'}">
 						<label>여</label> <input type="radio" name="gender" value="female" checked="checked">
 						<label>남</label> <input type="radio" name="gender" value="male">
+							</c:when>
+							<c:otherwise>
+						<label>여</label> <input type="radio" name="gender" value="female">
+						<label>남</label> <input type="radio" name="gender" value="male" checked="checked">
+							</c:otherwise>
+						</c:choose>
+						
 					</fieldset>
 
 					
