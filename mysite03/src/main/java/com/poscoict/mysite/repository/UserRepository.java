@@ -153,7 +153,7 @@ public class UserRepository {
 		      
 		}
 		
-		public boolean update(UserVo vo) {
+		public boolean update(UserVo userVo) {
 			boolean result = false;
 
 			Connection conn = null;
@@ -161,12 +161,20 @@ public class UserRepository {
 			try {
 				conn = getConnection();
 				
-				String sql = "update user set name = ?, gender = ?, password = ? where no = ?";
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, vo.getName());
-				pstmt.setString(2, vo.getGender());
-				pstmt.setString(3, vo.getPassword());
-				pstmt.setLong(4, vo.getNo());
+				if(userVo.getPassword() == null && "".equals(userVo.getPassword())) {
+					String sql = "update user set name = ?, gender = ? where no = ?";
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, userVo.getName());
+					pstmt.setString(2, userVo.getGender());
+					pstmt.setLong(3, userVo.getNo());
+				} else {
+					String sql = "update user set name = ?, gender = ?, password = ? where no = ?";
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, userVo.getName());
+					pstmt.setString(2, userVo.getGender());
+					pstmt.setString(3, userVo.getPassword());
+					pstmt.setLong(4, userVo.getNo());
+				}
 				
 				int count = pstmt.executeUpdate();
 				result = count == 1;
