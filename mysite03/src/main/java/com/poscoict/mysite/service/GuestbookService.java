@@ -22,6 +22,6 @@ public class GuestbookService {
 	}
 	
 	public Boolean addMessage(GuestbookVo vo) {
-		return guestbookRepository.insert(vo);
+		return guestbookRepository.insert(vo) == 1;
 	}
 }
