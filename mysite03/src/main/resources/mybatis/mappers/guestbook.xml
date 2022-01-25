@@ -17,6 +17,18 @@
    <select id="selectAll" resultType = "guestbookvo">
    	  select no, name, date_format(reg_date, '%Y/%m/%d %H:%i:%s') as regDate, message from guestbook order by reg_date desc
    </select>
+   
+   <delete id = "delete" parameterType = "map" >
+		<![CDATA[
+			delete from guestbook where no = #{no} and password = #{password}
+		]]>
+	</delete>
+	
+	<select id = "selectCnt" resultType = "integer">
+		<![CDATA[
+			select count(*) from guestbook
+		]]>
+	</select>
 
 
 </mapper>
