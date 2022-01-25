@@ -29,8 +29,18 @@
 					
 					<fieldset>
 						<legend>성별</legend>
+						
+						<c:choose>
+							<c:when test = "${authUser.gender == 'female'}">
 						<label>여</label> <input type="radio" name="gender" value="female" checked="checked">
 						<label>남</label> <input type="radio" name="gender" value="male">
+							</c:when>
+							<c:otherwise>
+						<label>여</label> <input type="radio" name="gender" value="female">
+						<label>남</label> <input type="radio" name="gender" value="male" checked="checked">
+							</c:otherwise>
+						</c:choose>
+						
 					</fieldset>
 
 					
