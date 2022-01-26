@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.poscoict.mysite.security.Auth;
+import com.poscoict.mysite.security.AuthUser;
 import com.poscoict.mysite.service.BoardService;
 import com.poscoict.mysite.vo.BoardVo;
+import com.poscoict.mysite.vo.UserVo;
 
 @Controller
 @RequestMapping("/board")
@@ -30,8 +32,9 @@ public class BoardController {
 		return "board/list";
 	}
 	
+	@Auth
 	@RequestMapping("/delete/{no}")
-	public String delete(@PathVariable("no") Long no, Model model) {
+	public String delete(@AuthUser UserVo authUser, @PathVariable("no") Long no, Model model) {
 		model.addAttribute("no",no);
 		boardService.deleteContents(no);
 		return "redirect:/board/list";
@@ -50,28 +53,33 @@ public class BoardController {
 		return "board/write";
 	}
 	
+	@Auth
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
-	public String write(BoardVo boardVo) {
+	public String write(@AuthUser UserVo authUser, BoardVo boardVo, @RequestParam(value = "p", required = true, defaultValue = "1") Integer page, @RequestParam(value = "kwd", required = true, defaultValue = "") String keyword) {
+		boardVo.setUserNo(authUser.getNo());
 		boardService.addContents(boardVo);
 		return "redirect:/board/list";
 	}
 
+	@Auth
 	@RequestMapping("/reply/{no}")
-	public String reply(@PathVariable("no") Long no, Model model) {
+	public String reply(@AuthUser UserVo authUser, @PathVariable("no") Long no, Model model) {
 		model.addAttribute("no",no);
 		model.addAttribute("selectvo", boardService.getContents(no));
 		return "board/write";
 	}
 	
+	@Auth
 	@RequestMapping("/update/{no}")
-	public String update(@PathVariable("no") Long no, Model model) {
+	public String update(@AuthUser UserVo authUser, @PathVariable("no") Long no, Model model) {
 		model.addAttribute("no",no);
 		model.addAttribute("selectvo", boardService.getContents(no));
 		return "board/modify";
 	}
 	
+	@Auth
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(BoardVo boardVo) {
+	public String update(@AuthUser UserVo authUser, BoardVo boardVo) {
 		boardService.updateContents(boardVo);
 		return "redirect:/board/list";
 	}
