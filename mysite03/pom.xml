@@ -1,48 +1,37 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.poscoict</groupId>
-    <artifactId>mysite</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>mysite03</artifactId>
-  <packaging>war</packaging>
-  
-  <properties>
-      <org.springframework-version>4.3.4.RELEASE</org.springframework-version>
-       <jcloverslf4j.version>1.7.6</jcloverslf4j.version>      
-       <logback.version>1.1.1</logback.version>
-   </properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.poscoict</groupId>
+		<artifactId>mysite</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>mysite03</artifactId>
+	<packaging>war</packaging>
 
-   <dependencies>
-   	  <!-- Spring Context(Container) -->
-	   	<dependency>
+	<properties>
+		<org.springframework-version>4.3.4.RELEASE</org.springframework-version>
+    	<jcloverslf4j.version>1.7.6</jcloverslf4j.version>		
+    	<logback.version>1.1.1</logback.version>		
+	</properties>
+
+	<dependencies>
+		<!-- Spring Context(Container) -->
+		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${org.springframework-version}</version>
-		<!-- JCL 제외 -->
-         <exclusions>
-            <exclusion>
-              <groupId>commons-logging</groupId>
-              <artifactId>commons-logging</artifactId>
-            </exclusion>
-         </exclusions>
-         </dependency>
-         
-         <!-- Logback --> 
-      <dependency>                                    
-         <groupId>org.slf4j</groupId>                
-         <artifactId>jcl-over-slf4j</artifactId>     
-         <version>${jcloverslf4j.version}</version>  
-      </dependency>
-      <dependency>
-         <groupId>ch.qos.logback</groupId>
-         <artifactId>logback-classic</artifactId>
-         <version>${logback.version}</version>
-      </dependency>
-		
-		
-		<!-- Spring MVC framework -->
+			<!-- JCL 제외 -->
+			<exclusions>
+			   <exclusion>
+				  <groupId>commons-logging</groupId>
+				  <artifactId>commons-logging</artifactId>
+			   </exclusion>
+			</exclusions>			
+		</dependency>
+
+		<!-- Spring MVC -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -56,13 +45,13 @@
 			<version>${org.springframework-version}</version>
 		</dependency>
 		
-		<!-- spring jdbc -->
+		<!-- Spring JDBC -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
-		
+
 		<!-- MyBatis -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
@@ -84,14 +73,26 @@
 		
 		<!-- MySQL Connector -->
 		<dependency>
-         	<groupId>mysql</groupId>
-	         <artifactId>mysql-connector-java</artifactId>
-	         <version>8.0.17</version>
-      	</dependency>
-      	</dependencies>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.17</version>
+		</dependency>
 
+		<!-- Logback --> 
+		<dependency>                                    
+			<groupId>org.slf4j</groupId>                
+			<artifactId>jcl-over-slf4j</artifactId>     
+			<version>${jcloverslf4j.version}</version>  
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.version}</version>
+		</dependency>
+			
+	</dependencies>
 
-   <build>
-      <finalName>mysite03</finalName>
-   </build>
+	<build>
+		<finalName>mysite03</finalName>
+	</build>	
 </project>
