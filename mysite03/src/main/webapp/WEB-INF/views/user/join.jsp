@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -17,8 +18,15 @@
 
 				<form id="join-form" name="joinForm" method="post" action="${pageContext.request.contextPath}/user/join">
 					<label class="block-label" for="name">이름</label>
-					<input id="name" name="name" type="text" value="">
-
+					<input id="name" name="name" type="text" value="${userVo.name}">
+					<p style = "text-align:left; padding-left:0; color:#f00">
+						<spring:hasBindErrors name="userVo">
+							<c:if test = "${errors.hasFieldErrors('name')}">
+								<spring:message code="${errors.getFieldError('name').codes[0]}" />
+							</c:if>
+						</spring:hasBindErrors>
+					</p>
+					
 					<label class="block-label" for="email">이메일</label>
 					<input id="email" name="email" type="text" value="">
 					<input type="button" value="id 중복체크">
