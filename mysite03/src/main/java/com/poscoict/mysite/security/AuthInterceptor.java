@@ -27,13 +27,13 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		
 		// 4. Handler Method @Auth가 없다면 Type에 있는지 확인해보는 것이 필요...(과제)
 		if(auth == null) {
-			return true;
+			auth = handlerMethod.getBeanType().getAnnotation(Auth.class);
 		}
 		
 		// 5. type과 method에 @Auth가 적용이 안되어 있는 경우 
-//		if(auth == null) {
-//			return true;
-//		}
+		if(auth == null) {
+			return true;
+		}
 
 		// 5. @Auth가 적용이 되어있기 때문에 인증(Authentication)여부 확인
 		HttpSession session = request.getSession();
@@ -49,6 +49,13 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		}
 		
 		// 6. 인증 확인!!! -> Controller의 Handler(method) 실행
+		if(authUser.getRole().equals("ADMIN")) {
+			return true;
+		}
+		if(!auth.role().equals(authUser.getRole())) {
+			response.sendRedirect(request.getContextPath());
+			return false;
+		}
 		return true;
 	}
 

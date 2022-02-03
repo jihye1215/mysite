@@ -4,7 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <div id="header">
-			<h1>MySite</h1>
+			<h1>${sitevo.title }</h1>
 			<ul>
 				<c:choose>
 					<c:when test = '${empty authUser}'>
@@ -14,6 +14,7 @@
 					<c:otherwise>
 						<li><a href="${pageContext.request.contextPath}/user/update">회원정보수정</a><li>
 						<li><a href="${pageContext.request.contextPath}/user/logout">로그아웃</a><li>
+						<li><a href="${pageContext.request.contextPath}/admin">관리자 페이지</a><li>
 						<li> ${authUser.name}님 안녕하세요 ^^;</li>
 					</c:otherwise>
 				</c:choose>
