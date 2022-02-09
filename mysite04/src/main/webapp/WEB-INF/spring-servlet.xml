@@ -14,8 +14,6 @@
 	http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context
 	http://www.springframework.org/schema/context/spring-context.xsd">
-	<!-- auto proxy -->
-	<aop:aspectj-autoproxy/>
 	
 	<!-- Message Converter, Handler Mapping, Validator 생성 및 설정 -->
 	<mvc:annotation-driven>
@@ -23,11 +21,6 @@
 			<bean class = "com.poscoict.mysite.security.AuthUserHandlerMethodArgumentResolver" />
 		</mvc:argument-resolvers>
 	</mvc:annotation-driven>
-		
-	
-	<!-- 서블릿 컨테이너(tomcat)의 DefaultServlet 위임(delegate) Handler -->
-	<mvc:default-servlet-handler/>
-	
 	<!-- Interceptors -->
 	<mvc:interceptors>
 		<mvc:interceptor>
@@ -47,21 +40,11 @@
 			<mvc:exclude-mapping path ="/assets/**" />
 			<bean class = "com.poscoict.mysite.security.AuthInterceptor"/>
 		</mvc:interceptor>
-		
-		<mvc:interceptor>
-			<mvc:mapping path="/**" />
-			<bean class = "com.poscoict.mysite.security.SiteInterceptor"/>
-		</mvc:interceptor>
+
 	</mvc:interceptors>
 	
-	<!-- ViewResolver -->
-	<bean id = "viewResolver" class = "org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="viewClass" value = "org.springframework.web.servlet.view.JstlView"/>
-		<property name="prefix" value = "/WEB-INF/views/"/>
-		<property name="suffix" value = ".jsp"/>
-	
-	</bean>
-	
+	<!-- mvc url-resource mapping -->
+	<mvc:resources mapping="/images/**" location="file:/upload-images/" />
 	<!-- 멀티파트 리졸버 -->
 	<bean id="multipartResolver"  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<!-- 최대업로드 가능한 바이트크기 -->
@@ -72,8 +55,6 @@
 		<property name="defaultEncoding" value="utf-8" />
 	</bean>	
 	
-	<!-- mvc url-resource mapping -->
-	<mvc:resources mapping="/images/**" location="file:/upload-images/" />
 	
 	<!-- MessageSource -->
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
@@ -83,7 +64,5 @@
 			</list>
 		</property>
 	</bean>
-	
-	<context:annotation-config />
-	<context:component-scan base-package="com.poscoict.mysite.controller, com.poscoict.mysite.exception" />
+
 </beans>
