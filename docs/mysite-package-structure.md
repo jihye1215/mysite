@@ -1,4 +1,5 @@
 ## Mysite04, 05 Package Structure
+<pre>
 [src]
    |--- [main]
                  |--- [java]
