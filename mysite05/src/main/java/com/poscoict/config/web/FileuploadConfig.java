@@ -35,6 +35,6 @@ public class FileuploadConfig extends WebMvcConfigurerAdapter {
 		
 		registry
 			.addResourceHandler("assets/**")
-			.addResourceLocations("classpath:/assets/");
+			.addResourceLocations("classpath:/com/poscoict/mysite/assets/");
 	}
 }
