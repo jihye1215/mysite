@@ -99,6 +99,7 @@ $(function(){
 					<label class="block-label" for="email">이메일</label>
 					<form:input path="email" />
 					<input type="button" id="btn-checkemail" value="id 중복체크">
+					<!-- iconfinder -->
 					<img id = "img-checkemail" src = "${pageContext.request.contextPath }/assets/images/check.png" style = "width : 16px; display:none"/>
 					<p style="text-align:left; padding-left:0; color:#f00">
 						<form:errors path="email" />
