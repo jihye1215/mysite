@@ -25,11 +25,22 @@ $(function(){
 		}
 		
 		// 2. 이메일 유효성 체크(empty)
+		if($("#email").val() === '') {
+			alert("이메일이 비어 있습니다.");
+			$("#email").focus();
+			return;
+		}
 		
 		// 3. 이메일 중복 체크 유무
 		// -> 이미지가 hide 상태인지, show 상태인지 확인해보기
 		
+		
 		// 4. 비밀번호 유효성 체크(empty)
+		if($("#password").val() === '') {
+			alert("비밀번호가 비어 있습니다.");
+			$("#password").focus();
+			return;
+		}
 		
 		// 5. 유효성 ok
 		console.log("ok");
