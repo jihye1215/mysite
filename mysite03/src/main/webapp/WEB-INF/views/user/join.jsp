@@ -33,7 +33,11 @@ $(function(){
 		
 		// 3. 이메일 중복 체크 유무
 		// -> 이미지가 hide 상태인지, show 상태인지 확인해보기
-		
+		if($("#img-checkemail").hide()) {
+			alert("이메일 중복체크를 해주세요.");
+			$("#email").focus();
+			return;
+		}
 		
 		// 4. 비밀번호 유효성 체크(empty)
 		if($("#password").val() === '') {
