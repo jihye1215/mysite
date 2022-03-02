@@ -48,7 +48,33 @@ var fetch = function() {
 
 $(function() {
 	// 추가 다이알로그 
-	
+	// 글 입력
+		$("#add-form").submit(function(event) {
+			event.preventDefault();
+			var vo = {};
+			vo.name = $("#input-name").val();
+			vo.password = $("#input-password").val();
+			vo.message = $("#tx-content").val();
+			console.log(vo);
+			$.ajax({
+				url : "${pageContext.request.contextPath }/api/guestbook/add",
+				type : "post",
+				dataType : "json",
+				contentType : "application/json",
+				data : JSON.stringify(vo),
+				success : function(response) {
+					if (response.result !== "success") {
+						console.error(response.message);
+						return;
+					}
+					var html = render(response.data);
+					$("#list-guestbook").prepend(html);
+				}
+			});
+			$("#input-name").val("");
+			$("#input-password").val("");
+			$("#tx-content").val("");
+		});
 
 	// 삭제 다이알로그 객체 만들기
 	var dialogDelete = $("#dialog-delete-form").dialog({
