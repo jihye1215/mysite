@@ -33,7 +33,7 @@ $(function(){
 		
 		// 3. 이메일 중복 체크 유무
 		// -> 이미지가 hide 상태인지, show 상태인지 확인해보기
-		if($("#img-checkemail").hide()) {
+		if($("#btn-checkemail").is(':visible')){
 			alert("이메일 중복체크를 해주세요.");
 			$("#email").focus();
 			return;
@@ -48,9 +48,10 @@ $(function(){
 		
 		// 5. 유효성 ok
 		console.log("ok");
-		// $("#join-form")[0].submit();
+		$("#join-form")[0].submit();
 		
 	});
+	
 	$("#email").change(function() {
 		$("#img-checkemail").hide();
 		$("#btn-checkemail").show();
