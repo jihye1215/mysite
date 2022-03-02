@@ -17,6 +17,7 @@ public class UserRepository {
 	private SqlSession sqlSession;
 	
 		public boolean insert(UserVo vo) {
+			System.out.println("==========================="  + "insert");
 			int count = sqlSession.insert("user.insert", vo);
 			return count == 1;
 		}
@@ -37,6 +38,10 @@ public class UserRepository {
 		public boolean update(UserVo vo) {
 			int count = sqlSession.update("user.update", vo);
 			return count == 1;
+		}
+
+		public UserVo findByEmail(String email) {
+			return sqlSession.selectOne("user.findByEmail", email);
 		}
 		
 }
